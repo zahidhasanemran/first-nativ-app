@@ -4,12 +4,12 @@ import {
   QueryClientProvider,
   focusManager,
 } from '@tanstack/react-query';
-
 import {AppStateStatus, Platform} from 'react-native';
-import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useAppState} from './hooks/useAppState';
-import Posts from './screens/Posts';
+import BlogScreen from './screens/BlogScreen';
+import SingleBlog from './screens/SingleBlog';
 
 const queryClient = new QueryClient({
   defaultOptions: {queries: {retry: 2}},
@@ -22,26 +22,25 @@ function onAppStateChange(status: AppStateStatus) {
   }
 }
 
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+const Stack = createNativeStackNavigator();
 
+function App(): JSX.Element {
   useAppState(onAppStateChange);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <NavigationContainer> */}
-      <SafeAreaView style={backgroundStyle}>
-        <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor={backgroundStyle.backgroundColor}
-          networkActivityIndicatorVisible={true}
-        />
-        <Posts />
-      </SafeAreaView>
-      {/* </NavigationContainer> */}
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={props => <BlogScreen {...props} />}
+          />
+
+          <Stack.Screen name="Singlepost">
+            {props => <SingleBlog {...props} />}
+          </Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
     </QueryClientProvider>
   );
 }

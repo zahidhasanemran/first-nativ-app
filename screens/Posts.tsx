@@ -1,17 +1,9 @@
+/* eslint-disable react/no-unstable-nested-components */
 import {useQuery} from '@tanstack/react-query';
 import React, {useState, useRef} from 'react';
 import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
 import {fetchPosts} from '../apis';
 import {useRefreshByUser} from '../hooks/useRefreshByUser';
-
-const Item = ({value, i}: any) => (
-  <View style={styles.itemContainer}>
-    <Text style={styles.itemText}>
-      {' '}
-      {i} {value?.email}
-    </Text>
-  </View>
-);
 
 const endComponent = () => {
   return (
@@ -25,8 +17,24 @@ const handleEmpty = () => {
   return <Text style={styles.text2}> No data present!</Text>;
 };
 
-const Posts = () => {
+const Posts = ({navigation}) => {
   const list = useRef(null);
+
+  const Item = ({value, i}: any) => (
+    <View style={styles.itemContainer}>
+      <Text
+        style={styles.itemText}
+        onPress={() =>
+          navigation.navigate('Singlepost', {
+            userId: value?.login?.uuid,
+            email: value?.email,
+          })
+        }>
+        {' '}
+        {i} {value?.email}
+      </Text>
+    </View>
+  );
 
   const press = () => {
     //@ts-ignore
