@@ -1,0 +1,14 @@
+{
+  "console-ninja.darkTheme.obsolete.decorationAttachmentRenderOptions": {
+    "border": null,
+    "borderColor": null,
+    "fontStyle": null,
+    "fontWeight": null,
+    "textDecoration": null,
+    "color": "rgb(153, 153, 153)",
+    "backgroundColor": null,
+    "margin": "1em",
+    "width": null,
+    "height": null
+  }
+}
