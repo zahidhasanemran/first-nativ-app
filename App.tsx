@@ -12,7 +12,7 @@ import BlogScreen from './screens/BlogScreen';
 import SingleBlog from './screens/SingleBlog';
 
 const queryClient = new QueryClient({
-  defaultOptions: {queries: {retry: 2}},
+  defaultOptions: {queries: {retry: 0}},
 });
 
 function onAppStateChange(status: AppStateStatus) {
@@ -33,9 +33,10 @@ function App(): JSX.Element {
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
-            component={props => <BlogScreen {...props} />}
+            component={(
+              props: React.JSX.IntrinsicAttributes & {navigation: any},
+            ) => <BlogScreen {...props} />}
           />
-
           <Stack.Screen name="Singlepost">
             {props => <SingleBlog {...props} />}
           </Stack.Screen>

@@ -1,9 +1,11 @@
 /* eslint-disable react/no-unstable-nested-components */
 import {useQuery} from '@tanstack/react-query';
 import React, {useState, useRef} from 'react';
-import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Button, FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import {fetchPosts} from '../apis';
 import {useRefreshByUser} from '../hooks/useRefreshByUser';
+import ReactSelect from './ReactSelect';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const endComponent = () => {
   return (
@@ -19,19 +21,30 @@ const handleEmpty = () => {
 
 const Posts = ({navigation}) => {
   const list = useRef(null);
+  const [filval, setFilval] = useState('technology');
 
   const Item = ({value, i}: any) => (
     <View style={styles.itemContainer}>
+      <Image
+        source={{
+          uri: value?.urlToImage ?? value?.cover_image,
+          // 'https://blog.logrocket.com/wp-content/uploads/2023/06/localizing-content-remix-contentful.png',
+        }}
+        style={styles.img}
+      />
       <Text
         style={styles.itemText}
         onPress={() =>
           navigation.navigate('Singlepost', {
-            userId: value?.login?.uuid,
-            email: value?.email,
+            title: value?.title,
+            img: value?.urlToImage ?? value?.cover_image,
+            content: value?.content ?? value?.description,
+            pdate: value?.publishedAt ?? value?.published_at,
           })
         }>
-        {' '}
-        {i} {value?.email}
+        {/* {' '}
+        {i}  */}
+        {value?.title}
       </Text>
     </View>
   );
@@ -43,10 +56,13 @@ const Posts = ({navigation}) => {
 
   const StartComponent = () => {
     return (
-      <View>
-        <Text style={styles.text}> List start</Text>
-        <Button onPress={press} title="Go to end" />
-      </View>
+      <>
+        <View>
+          <Text style={styles.text}> List start</Text>
+          <ReactSelect value={filval} setValue={setFilval} />
+          <Button onPress={press} title="Go to end" />
+        </View>
+      </>
     );
   };
 
@@ -59,9 +75,10 @@ const Posts = ({navigation}) => {
     {
       keepPreviousData: true, // keep the old data until the new data comes
       onSuccess: data => {
-        if (data?.results?.length && users.length < 100) {
+        // if (data?.articles?.length && users.length < 100) {
+        if (data?.length && users.length < 100) {
           // @ts-ignore
-          setUsers([...users, ...data?.results]);
+          setUsers([...users, ...data]);
         } // append the new data to the old data
         // setPage(data?.page + 1);
       },
@@ -95,7 +112,8 @@ const Posts = ({navigation}) => {
       ListFooterComponent={endComponent}
       ListEmptyComponent={handleEmpty}
       data={users}
-      keyExtractor={item => item?.login?.md5}
+      keyExtractor={item => item?.id}
+      // keyExtractor={item => item?.login?.md5}
       renderItem={({item, index}) => <Item value={item} i={index} />}
       onRefresh={refreshOnPull}
       refreshing={false}
@@ -106,8 +124,14 @@ const Posts = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  img: {
+    width: '100%',
+    height: 120,
+    borderRadius: 4,
+    marginBottom: 15,
+  },
   itemContainer: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: '#fff',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
