@@ -1,3 +1,4 @@
+import React from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 
 const filters = [
@@ -10,11 +11,10 @@ const filters = [
   {label: 'Business', value: 'business'},
 ];
 
-const ReactSelect = ({value, setValue}) => {
+const ReactSelect = ({value, setValue}: any) => {
   console.log(value, setValue);
 
   return (
-    // eslint-disable-next-line react/react-in-jsx-scope
     <RNPickerSelect
       onValueChange={valu => setValue(valu)}
       items={filters}

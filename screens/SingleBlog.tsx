@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-const SingleBlog = ({navigation, route}: any) => {
+const SingleBlog = ({route}: any) => {
   const {pdate, title, img, content} = route.params;
   console.log(img);
 
