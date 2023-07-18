@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {API_KEY_NEWS} from '@env';
+// import {API_KEY_NEWS} from '@env';
 
 export async function fetchPosts({page = 1, limit = 10}) {
   try {
